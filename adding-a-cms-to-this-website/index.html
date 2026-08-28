@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#aaaaaa"><title>Adding a CMS to This Website — József Schaffer</title><meta name="description" content="I moved away from Framer and rebuilt this site with Ghost, Astro, and GitHub Pages."><link rel="icon" href="/favicon.png?v=20260413-2"><meta property="og:type" content="article"><meta property="og:title" content="Adding a CMS to This Website"><meta property="og:description" content="I moved away from Framer and rebuilt this site with Ghost, Astro, and GitHub Pages."><meta property="og:image" content="/og-image.png?v=20260413-2"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Adding a CMS to This Website"><meta name="twitter:description" content="I moved away from Framer and rebuilt this site with Ghost, Astro, and GitHub Pages."><meta name="twitter:image" content="/og-image.png?v=20260413-2"><link rel="stylesheet" href="/_astro/_slug_.BaRZ7atO.css">
+<style>.about-cursor{position:fixed;top:0;left:0;z-index:9999;display:none;width:72px;height:72px;pointer-events:none;background-image:url(/img/CGA_pointer.png);background-repeat:no-repeat;background-position:top left;background-size:contain;image-rendering:pixelated;will-change:transform}.about-cursor.is-select{background-image:url(/img/CGA_pointer_select.png)}.about-cursor.is-active{background-image:url(/img/CGA_pointer_active.png)}@media(hover:hover)and (pointer:fine){[data-about-cursor-root],[data-about-cursor-root] *{cursor:none}}
+.site-footer{margin:0;padding:32px 0;color:#000;font-family:Geist Pixel Square,Geist,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:22px;font-weight:400;line-height:1.4;text-align:center}@media(max-width:900px){.site-footer{font-size:18px}}@media(max-width:540px){.site-footer{padding:12px 0;font-size:16px}}
+</style></head> <body class="post"> <nav class="post-nav" aria-label="Site navigation" data-about-cursor-root> <div class="post-nav__inner"> <a class="post-nav__item" href="/projects/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">Projects</span> <span class="post-nav__arrow" aria-hidden="true">←</span> </span> </a> <a class="post-nav__item post-nav__item--end" href="/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">jozsefschaffer.com</span> </span> </a> </div> </nav> <article> <div class="gh-content"> <header class="post-header"> <h1>Adding a CMS to This Website</h1> <div class="post-byline"> <span>József Schaffer</span> <span> · </span> <span>6 April 2026</span> </div> </header> <p>One thing I’ve always wanted to do is add long-form posts to my website: portfolio pieces, or deeper write-ups about some of my experiments. I needed a CMS for that.</p><p>Even though my Framer subscription included CMS access, I wasn’t sure it made sense for me, especially with the <a href="https://www.framer.com/pricing" target="_blank" rel="noopener noreferrer" rel="noreferrer">quite hefty yearly price tag</a>. I know Framer works well for simple CMS tasks, and I still like it a lot. But I’ve also run into its limits, especially when I want to extend things or build something more custom.</p><p>I made my portfolio long-form pieces in Framer without a CMS, and it was such a hassle, especially around mobile breakpoints. Framer has a good system, but I always ended up fighting it, and something would always look slightly off at one breakpoint or another. Lots of bespoke fixes. I know it might be on me.</p><p>Anyway, when the annual renewal was coming up, I decided it was time for me to move on. But where to?</p><p>I wanted to spend little (or no) money on it, and I knew I had to serve media content in some way. I needed images that scaled properly across devices, and maybe short-form video too. I knew <a href="https://docs.github.com/en/pages" target="_blank" rel="noopener noreferrer" rel="noreferrer">GitHub Pages</a> was a solid contender in that regard, but what would I do with the media content? I didn’t want a manual process.</p><p><a href="https://ghost.org/" target="_blank" rel="noopener noreferrer" rel="noreferrer">Ghost</a> seemed like a stable option as a CMS. I could host it myself and edit my content for free, but then what? After some research and tips I ended up doing the following:</p><p>Ghost only runs locally on my machine. I only need it when I’m editing, or when I need to pull content from its API. This way I don’t need to have it online at all times, which saves a bit of money on a VPS.</p><p>Turns out Ghost even rescales uploaded high-resolution images and serves the appropriate version for each device. The only remaining puzzle piece was how to streamline that and serve it in my own custom-built theme. That’s when I found <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" rel="noreferrer">Astro</a>, a static site generator.</p><p>The workflow is this:</p><figure class="kg-card kg-image-card"><img src="/content/images/2026/05/ghost_astro_deploy_pipeline.png" class="kg-image" alt="" data-no-lightbox loading="lazy" width="1204" height="1314" srcset="/content/images/size/w600/2026/05/ghost_astro_deploy_pipeline.png 600w, /content/images/size/w1000/2026/05/ghost_astro_deploy_pipeline.png 1000w, /content/images/2026/05/ghost_astro_deploy_pipeline.png 1204w" sizes="(min-width: 720px) 720px"></figure><p>I start the Ghost server, edit my content, add media, and hit publish. Then Astro pulls the posts from the Ghost Content API and renders them the way I want. This approach is a little fiddly, but it also comes with a lot of flexibility.</p><p>Astro lets me run a local dev server to test my content. I can even connect to it with my phone and test it on device. When I feel good about it, I can generate everything as static files. A simple deploy script creates a disposable <code>gh-pages</code> branch, then pushes that to GitHub. Finally, GitHub Pages serves all of it.</p><p>I even connected the home machine running Ghost to <a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer" rel="noreferrer">Tailscale</a>, so the Ghost admin and API are available to me from virtually anywhere. That means I can keep working on this website wherever I am, whether I’m editing content or changing the design — for free, and with as much freedom as I want.</p> </div> </article> <footer class="site-footer" data-about-cursor-select>© 2026 József Schaffer</footer> <script type="module">const r=new Map;let s=null;function u(){return s||(s=new AudioContext),s}async function i(t){if(r.has(t))return r.get(t);const n=await(await fetch(t)).arrayBuffer(),o=await u().decodeAudioData(n);return r.set(t,o),o}async function d(t,e={}){const n=u(),o=await i(t),a=n.createBufferSource(),c=n.createGain();return c.gain.value=.5,a.buffer=o,a.connect(c),c.connect(n.destination),e.onStart?.(),a.start(),new Promise(f=>{a.onended=f})}document.querySelectorAll("[data-pc-sound]").forEach(t=>{t.addEventListener("click",e=>{const n=t.closest("a")?.href||(t instanceof HTMLAnchorElement?t.href:null);n&&e.preventDefault(),d(t.dataset.pcSound,{onStart:()=>t.dispatchEvent(new CustomEvent("pc-sound-start"))}).then(()=>{t.dispatchEvent(new CustomEvent("pc-sound-end")),n&&(window.location.href=n)})})});</script> <div class="about-cursor" data-about-cursor aria-hidden="true"></div> <script type="module">const base = "";
+
+      import(`${base}/js/about-cursor.js`).then((m) => m.initAboutCursor());
+    </script> <script>
+      (() => {
+        const nav = document.querySelector('.post-nav');
+        if (!nav) return;
+
+        const compactAt = 72;
+        const expandAt = 1;
+        let isCompact = nav.classList.contains('post-nav--compact');
+        let scrollFrame = 0;
+
+        const syncCompactState = () => {
+          scrollFrame = 0;
+          const shouldCompact = isCompact
+            ? window.scrollY > expandAt
+            : window.scrollY >= compactAt;
+
+          if (shouldCompact === isCompact) return;
+          isCompact = shouldCompact;
+          nav.classList.toggle('post-nav--compact', isCompact);
+        };
+
+        const onScroll = () => {
+          if (scrollFrame) return;
+          scrollFrame = requestAnimationFrame(syncCompactState);
+        };
+
+        syncCompactState();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+    </script> <script src="/js/ghost-cards.js"></script> <script src="/js/lightbox.js"></script> <script>
+      (() => {
+        document.querySelectorAll('.gh-content pre:not([data-no-copy])').forEach((pre) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'copy-code-wrap';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+          const code = pre.querySelector('code');
+          const text = (code || pre).textContent;
+          const singleLine = text.trim().split('\n').length === 1;
+          const btn = document.createElement('button');
+          btn.textContent = 'Copy';
+          btn.className = 'copy-code-btn' + (singleLine ? ' copy-code-btn--center' : '');
+          btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(text).then(() => {
+              btn.textContent = 'Copied!';
+              setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+            });
+          });
+          wrapper.appendChild(btn);
+        });
+      })();
+    </script> </body> </html>

@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CGA Shader Test</title>
+    <style>
+      :root {
+        --cga-black: #000;
+        --cga-cyan: #0aa;
+        --cga-gray: #aaa;
+        --cga-magenta: #a0a;
+        --cga-white: #fff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+
+      body {
+        min-height: 100vh;
+        padding: 24px;
+        background: var(--cga-gray);
+        color: var(--cga-black);
+        font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas,
+          "Liberation Mono", monospace;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .shader-bench {
+        width: min(100%, 1800px);
+        min-height: calc(100vh - 48px);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+        gap: 24px;
+        align-items: center;
+      }
+
+      .preview {
+        position: relative;
+        min-width: 0;
+      }
+
+      .preview::after {
+        content: "Drop image";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        border: 4px dashed var(--cga-magenta);
+        background: rgb(170 170 170 / 72%);
+        color: var(--cga-black);
+        font-size: clamp(20px, 4vw, 56px);
+        line-height: 1;
+        text-transform: uppercase;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 120ms linear;
+      }
+
+      .preview.is-dragging::after {
+        opacity: 1;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        aspect-ratio: 3 / 2;
+        background: var(--cga-gray);
+        cursor: grab;
+        image-rendering: pixelated;
+        touch-action: none;
+      }
+
+      .preview.is-light-dragging canvas {
+        cursor: grabbing;
+      }
+
+      .controls {
+        display: grid;
+        gap: 18px;
+        padding: 16px;
+        border: 2px solid var(--cga-black);
+        background: var(--cga-white);
+        box-shadow: 8px 8px 0 var(--cga-black);
+      }
+
+      .controls__title {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .control {
+        display: grid;
+        gap: 8px;
+      }
+
+      .control__label {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 12px;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .control__value {
+        color: var(--cga-magenta);
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--cga-magenta);
+      }
+
+      .toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 12px;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .toggle input {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        accent-color: var(--cga-cyan);
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      button {
+        min-height: 38px;
+        border: 2px solid var(--cga-black);
+        background: var(--cga-gray);
+        color: var(--cga-black);
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+
+      button:hover,
+      button:focus-visible {
+        background: var(--cga-cyan);
+        outline: 2px solid var(--cga-magenta);
+        outline-offset: 2px;
+      }
+
+      @media (max-width: 900px) {
+        body {
+          padding: 12px;
+        }
+
+        .shader-bench {
+          min-height: calc(100vh - 24px);
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shader-bench">
+      <div class="preview">
+        <canvas id="cga-test" aria-label="CGA shader preview"></canvas>
+      </div>
+
+      <form class="controls" id="shader-controls">
+        <h1 class="controls__title">CGA shader</h1>
+
+        <label class="control">
+          <span class="control__label">
+            Pixel size
+            <output class="control__value" for="pixelSize" data-output="pixelSize"></output>
+          </span>
+          <input
+            id="pixelSize"
+            name="pixelSize"
+            type="range"
+            min="1"
+            max="24"
+            step="1"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Brightness
+            <output class="control__value" for="brightness" data-output="brightness"></output>
+          </span>
+          <input
+            id="brightness"
+            name="brightness"
+            type="range"
+            min="0.2"
+            max="2"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Contrast
+            <output class="control__value" for="contrast" data-output="contrast"></output>
+          </span>
+          <input
+            id="contrast"
+            name="contrast"
+            type="range"
+            min="0"
+            max="2.5"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Gamma
+            <output class="control__value" for="gamma" data-output="gamma"></output>
+          </span>
+          <input
+            id="gamma"
+            name="gamma"
+            type="range"
+            min="0.3"
+            max="2.4"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Dither
+            <output class="control__value" for="ditherStrength" data-output="ditherStrength"></output>
+          </span>
+          <input
+            id="ditherStrength"
+            name="ditherStrength"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Saturation
+            <output class="control__value" for="saturation" data-output="saturation"></output>
+          </span>
+          <input
+            id="saturation"
+            name="saturation"
+            type="range"
+            min="0"
+            max="2"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Magenta bias
+            <output class="control__value" for="magentaBias" data-output="magentaBias"></output>
+          </span>
+          <input
+            id="magentaBias"
+            name="magentaBias"
+            type="range"
+            min="0"
+            max="0.85"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Light radius
+            <output class="control__value" for="lightRadius" data-output="lightRadius"></output>
+          </span>
+          <input
+            id="lightRadius"
+            name="lightRadius"
+            type="range"
+            min="0.08"
+            max="1.3"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Light power
+            <output class="control__value" for="lightPower" data-output="lightPower"></output>
+          </span>
+          <input
+            id="lightPower"
+            name="lightPower"
+            type="range"
+            min="0"
+            max="2.5"
+            step="0.01"
+          />
+        </label>
+
+        <label class="control">
+          <span class="control__label">
+            Ambient
+            <output class="control__value" for="ambient" data-output="ambient"></output>
+          </span>
+          <input
+            id="ambient"
+            name="ambient"
+            type="range"
+            min="0"
+            max="1.5"
+            step="0.01"
+          />
+        </label>
+
+        <label class="toggle">
+          White
+          <input id="useWhite" name="useWhite" type="checkbox" />
+        </label>
+
+        <div class="actions">
+          <button type="button" id="reset-settings">Reset</button>
+          <button type="button" id="copy-settings">Copy</button>
+        </div>
+      </form>
+    </main>
+
+    <script type="module">
+      import * as THREE from "./vendor/three.module.js";
+      import { UltraHDRLoader } from "./vendor/UltraHDRLoader.js";
+
+      const imagePath = "/img/bg_test.png";
+      const defaults = {
+        pixelSize: 7,
+        brightness: 1,
+        contrast: 1.18,
+        gamma: 1,
+        ditherStrength: 0.35,
+        saturation: 1,
+        magentaBias: 0.2,
+        lightRadius: 0.76,
+        lightPower: 1.19,
+        ambient: 0.72,
+        useWhite: true,
+      };
+      const settings = { ...defaults };
+
+      const vertexShaderSource = `
+varying vec2 vUv;
+
+void main() {
+  vUv = uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`;
+
+      const sourceFragmentShaderSource = `
+precision highp float;
+
+uniform sampler2D uImage;
+uniform vec2 uImageResolution;
+uniform vec2 uLightUv;
+uniform float uLightRadius;
+uniform float uLightPower;
+uniform float uAmbient;
+
+varying vec2 vUv;
+
+void main() {
+  vec3 col = texture2D(uImage, vUv).rgb;
+
+  vec2 lightDelta = vUv - uLightUv;
+  lightDelta.x *= uImageResolution.x / max(1.0, uImageResolution.y);
+  float light = smoothstep(uLightRadius, 0.0, length(lightDelta));
+  col *= uAmbient + light * uLightPower;
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+      const cgaFragmentShaderSource = `
+precision highp float;
+
+uniform sampler2D uImage;
+uniform vec2 iResolution;
+uniform float iTime;
+uniform float uPixelSize;
+uniform float uDitherStrength;
+uniform float uUseWhite;
+uniform float uBrightness;
+uniform float uContrast;
+uniform float uGamma;
+uniform float uSaturation;
+uniform float uMagentaBias;
+
+varying vec2 vUv;
+
+// CGA palette 1 low intensity - dim controls output brightness
+const float dim = 1.0;
+const vec3 CGA_BLACK   = vec3(0.0, 0.0, 0.0);
+const vec3 CGA_CYAN    = dim * vec3(0.0, 0.667, 0.667);
+const vec3 CGA_MAGENTA = dim * vec3(0.667, 0.0, 0.667);
+const vec3 CGA_WHITE   = dim * vec3(0.667, 0.667, 0.667);
+
+vec3 nearestCGA(vec3 col) {
+  vec3 best = CGA_BLACK;
+  float bestDist = distance(col, CGA_BLACK);
+
+  float d = distance(col, CGA_MAGENTA) * (1.0 - clamp(uMagentaBias, 0.0, 0.95));
+  if (d < bestDist) { bestDist = d; best = CGA_MAGENTA; }
+
+  d = distance(col, CGA_CYAN);
+  if (d < bestDist) { bestDist = d; best = CGA_CYAN; }
+
+  if (uUseWhite > 0.5) {
+    d = distance(col, CGA_WHITE);
+    if (d < bestDist) { bestDist = d; best = CGA_WHITE; }
+  }
+
+  return best;
+}
+
+void main() {
+  float pixelSize = max(1.0, uPixelSize);
+  vec2 cell = floor(gl_FragCoord.xy / pixelSize);
+  vec2 snapped = (cell + 0.5) * pixelSize;
+  vec2 uv = clamp(snapped / iResolution.xy, 0.0, 1.0);
+
+  vec3 col = texture2D(uImage, uv).rgb;
+
+  col *= uBrightness;
+  col = (col - 0.5) * uContrast + 0.5;
+  col = pow(max(col, vec3(0.0)), vec3(1.0 / max(0.001, uGamma)));
+
+  float luminance = dot(col, vec3(0.299, 0.587, 0.114));
+  col = mix(vec3(luminance), col, uSaturation);
+
+  // Checkerboard dither to CGA palette
+  float checker = mod(cell.x + cell.y, 2.0);
+  col += (checker - 0.5) * uDitherStrength;
+
+  gl_FragColor = vec4(nearestCGA(col), 1.0);
+}
+`;
+
+      function formatValue(value) {
+        if (Number.isInteger(value)) {
+          return String(value);
+        }
+
+        return value.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+      }
+
+      function updateControlUi() {
+        Object.entries(settings).forEach(([key, value]) => {
+          const control = document.querySelector(`[name="${key}"]`);
+          const output = document.querySelector(`[data-output="${key}"]`);
+
+          if (control instanceof HTMLInputElement) {
+            if (control.type === "checkbox") {
+              control.checked = Boolean(value);
+            } else {
+              control.value = String(value);
+            }
+          }
+
+          if (output instanceof HTMLOutputElement && typeof value === "number") {
+            output.value = formatValue(value);
+          }
+        });
+      }
+
+      function setupControls() {
+        const form = document.getElementById("shader-controls");
+        const resetButton = document.getElementById("reset-settings");
+        const copyButton = document.getElementById("copy-settings");
+
+        if (!(form instanceof HTMLFormElement)) {
+          return;
+        }
+
+        form.addEventListener("input", (event) => {
+          const control = event.target;
+
+          if (!(control instanceof HTMLInputElement) || !(control.name in settings)) {
+            return;
+          }
+
+          settings[control.name] =
+            control.type === "checkbox" ? control.checked : Number(control.value);
+          updateControlUi();
+        });
+
+        resetButton?.addEventListener("click", () => {
+          Object.assign(settings, defaults);
+          updateControlUi();
+        });
+
+        copyButton?.addEventListener("click", async () => {
+          const text = JSON.stringify(settings, null, 2);
+
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch (error) {
+            console.log(text);
+          }
+        });
+
+        updateControlUi();
+      }
+
+      function loadImage(src) {
+        return new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = () => resolve(image);
+          image.onerror = () => reject(new Error(`Could not load ${src}`));
+          image.src = src;
+        });
+      }
+
+      function loadDroppedImage(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            if (typeof reader.result !== "string") {
+              reject(new Error("Could not read dropped image."));
+              return;
+            }
+
+            loadImage(reader.result).then(resolve, reject);
+          };
+
+          reader.onerror = () => reject(new Error("Could not read dropped image."));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function getDroppedImageFile(event) {
+        return [...(event.dataTransfer?.files || [])].find((file) =>
+          file.type.startsWith("image/")
+        );
+      }
+
+      function hasDraggedFiles(event) {
+        return [...(event.dataTransfer?.types || [])].includes("Files");
+      }
+
+      async function init() {
+        const canvas = document.getElementById("cga-test");
+        const preview = canvas?.closest(".preview");
+
+        if (!(canvas instanceof HTMLCanvasElement)) {
+          return;
+        }
+
+        const renderer = new THREE.WebGLRenderer({
+          canvas,
+          alpha: false,
+          antialias: false,
+          powerPreference: "high-performance",
+        });
+        renderer.setClearColor(0xaaaaaa, 1);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.35;
+
+        const sourceScene = new THREE.Scene();
+        sourceScene.background = new THREE.Color(0xaaaaaa);
+        const postScene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
+        camera.position.set(0, 0, 4.8);
+        camera.lookAt(0, 0, 0);
+        const postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 10);
+        postCamera.position.z = 1;
+
+        const image = await loadImage(imagePath);
+        const texture = new THREE.Texture(image);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        texture.needsUpdate = true;
+
+        const fakeHDRTexture = texture.clone();
+        fakeHDRTexture.mapping = THREE.EquirectangularReflectionMapping;
+        fakeHDRTexture.colorSpace = THREE.SRGBColorSpace;
+        fakeHDRTexture.needsUpdate = true;
+
+        const ultraHDRLoader = new UltraHDRLoader();
+        ultraHDRLoader.setDataType(THREE.FloatType);
+        const ultraHDRTexture = await ultraHDRLoader.loadAsync(
+          "./vendor/spruit_sunrise_2k.hdr.jpg"
+        );
+        ultraHDRTexture.mapping = THREE.EquirectangularReflectionMapping;
+        ultraHDRTexture.needsUpdate = true;
+
+        const imageSize = new THREE.Vector2(image.naturalWidth, image.naturalHeight);
+        const planeSize = new THREE.Vector2(3, 2);
+        const mouseUv = new THREE.Vector2(0.5, 0.35);
+        const lightWorld = new THREE.Vector3();
+        const renderTarget = new THREE.WebGLRenderTarget(1, 1, {
+          depthBuffer: false,
+          stencilBuffer: false,
+          minFilter: THREE.NearestFilter,
+          magFilter: THREE.NearestFilter,
+        });
+        renderTarget.texture.colorSpace = THREE.SRGBColorSpace;
+
+        const sourceMaterial = new THREE.ShaderMaterial({
+          uniforms: {
+            uImage: { value: texture },
+            uImageResolution: { value: imageSize },
+            uLightUv: { value: mouseUv },
+            uLightRadius: { value: settings.lightRadius },
+            uLightPower: { value: settings.lightPower },
+            uAmbient: { value: settings.ambient },
+          },
+          vertexShader: vertexShaderSource,
+          fragmentShader: sourceFragmentShaderSource,
+        });
+
+        const postMaterial = new THREE.ShaderMaterial({
+          uniforms: {
+            uImage: { value: renderTarget.texture },
+            iResolution: { value: new THREE.Vector2(1, 1) },
+            iTime: { value: 0 },
+            uPixelSize: { value: settings.pixelSize },
+            uDitherStrength: { value: settings.ditherStrength },
+            uUseWhite: { value: settings.useWhite ? 1 : 0 },
+            uBrightness: { value: settings.brightness },
+            uContrast: { value: settings.contrast },
+            uGamma: { value: settings.gamma },
+            uSaturation: { value: settings.saturation },
+            uMagentaBias: { value: settings.magentaBias },
+          },
+          vertexShader: vertexShaderSource,
+          fragmentShader: cgaFragmentShaderSource,
+          depthTest: false,
+          depthWrite: false,
+        });
+
+        const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), sourceMaterial);
+        sourceScene.add(plane);
+        const postPlane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMaterial);
+        postScene.add(postPlane);
+
+        const lightSource = new THREE.PointLight(0xffffff, 2.5, 8);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.55);
+        const lightMarker = new THREE.Mesh(
+          new THREE.CircleGeometry(0.035, 16),
+          new THREE.MeshBasicMaterial({ color: 0xffffff })
+        );
+        lightMarker.renderOrder = 2;
+        sourceScene.add(lightSource, ambientLight, lightMarker);
+
+        const torusGeometry = new THREE.TorusKnotGeometry(0.28, 0.12, 128, 24, 1, 3);
+        const fakeHDRTorus = new THREE.Mesh(
+          torusGeometry,
+          new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 0.0,
+            metalness: 1.0,
+            envMap: fakeHDRTexture,
+            envMapIntensity: 1.9,
+          })
+        );
+        const ultraHDRTorus = new THREE.Mesh(
+          torusGeometry,
+          new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 0.0,
+            metalness: 1.0,
+            envMap: ultraHDRTexture,
+            envMapIntensity: 1.0,
+          })
+        );
+        fakeHDRTorus.position.set(-0.62, 0, 0.65);
+        ultraHDRTorus.position.set(0.62, 0, 0.65);
+        sourceScene.add(fakeHDRTorus, ultraHDRTorus);
+
+        function fitPlane() {
+          const rect = canvas.getBoundingClientRect();
+          const viewAspect = Math.max(1, rect.width) / Math.max(1, rect.height);
+          const imageAspect = imageSize.x / imageSize.y;
+          const distance = Math.abs(camera.position.z - plane.position.z);
+          const viewHeight =
+            2 * Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5)) * distance;
+          const viewWidth = viewHeight * viewAspect;
+          const maxWidth = viewWidth * 0.94;
+          const maxHeight = viewHeight * 0.94;
+
+          if (imageAspect > maxWidth / maxHeight) {
+            planeSize.set(maxWidth, maxWidth / imageAspect);
+          } else {
+            planeSize.set(maxHeight * imageAspect, maxHeight);
+          }
+
+          plane.scale.set(planeSize.x, planeSize.y, 1);
+          updateLightWorldPosition();
+        }
+
+        function updateLightWorldPosition() {
+          const lightDepth = (camera.position.z + fakeHDRTorus.position.z) * 0.5;
+
+          lightWorld.set(
+            (mouseUv.x - 0.5) * planeSize.x,
+            (mouseUv.y - 0.5) * planeSize.y,
+            lightDepth
+          );
+          lightSource.position.copy(lightWorld);
+          lightMarker.position.set(lightWorld.x, lightWorld.y, lightDepth + 0.05);
+          sourceMaterial.uniforms.uLightUv.value.copy(mouseUv);
+        }
+
+        function getPointerUv(event) {
+          const rect = canvas.getBoundingClientRect();
+
+          return new THREE.Vector2(
+            THREE.MathUtils.clamp((event.clientX - rect.left) / rect.width, 0, 1),
+            THREE.MathUtils.clamp(1 - (event.clientY - rect.top) / rect.height, 0, 1)
+          );
+        }
+
+        function isPointerNearLight(event) {
+          const pointerUv = getPointerUv(event);
+          const delta = pointerUv.sub(mouseUv);
+          delta.x *= planeSize.x / Math.max(0.001, planeSize.y);
+
+          return delta.length() < 0.08;
+        }
+
+        function resize() {
+          const rect = canvas.getBoundingClientRect();
+          const ratio = window.devicePixelRatio || 1;
+          const width = Math.max(1, Math.floor(rect.width * ratio));
+          const height = Math.max(1, Math.floor(rect.height * ratio));
+
+          renderer.setPixelRatio(ratio);
+          renderer.setSize(rect.width, rect.height, false);
+          renderTarget.setSize(width, height);
+          postMaterial.uniforms.iResolution.value.set(width, height);
+
+          const aspect = rect.width / Math.max(1, rect.height);
+          camera.aspect = aspect;
+          camera.updateProjectionMatrix();
+          fitPlane();
+        }
+
+        function updateMouseLight(event) {
+          mouseUv.copy(getPointerUv(event));
+          updateLightWorldPosition();
+        }
+
+        function setupLightDrag() {
+          let isDraggingLight = false;
+
+          canvas.addEventListener("pointerdown", (event) => {
+            if (!isPointerNearLight(event)) {
+              return;
+            }
+
+            event.preventDefault();
+            isDraggingLight = true;
+            canvas.setPointerCapture(event.pointerId);
+            preview?.classList.add("is-light-dragging");
+            updateMouseLight(event);
+          });
+
+          canvas.addEventListener("pointermove", (event) => {
+            if (!isDraggingLight) {
+              return;
+            }
+
+            updateMouseLight(event);
+          });
+
+          const stopDragging = (event) => {
+            if (!isDraggingLight) {
+              return;
+            }
+
+            isDraggingLight = false;
+            preview?.classList.remove("is-light-dragging");
+
+            if (canvas.hasPointerCapture(event.pointerId)) {
+              canvas.releasePointerCapture(event.pointerId);
+            }
+          };
+
+          canvas.addEventListener("pointerup", stopDragging);
+          canvas.addEventListener("pointercancel", stopDragging);
+        }
+
+        async function replaceImage(file) {
+          const nextImage = await loadDroppedImage(file);
+          imageSize.set(nextImage.naturalWidth, nextImage.naturalHeight);
+          texture.image = nextImage;
+          texture.needsUpdate = true;
+          fitPlane();
+        }
+
+        function setupDropTarget() {
+          if (!(preview instanceof HTMLElement)) {
+            return;
+          }
+
+          let dragDepth = 0;
+
+          preview.addEventListener("dragenter", (event) => {
+            if (!hasDraggedFiles(event)) {
+              return;
+            }
+
+            event.preventDefault();
+            dragDepth += 1;
+            preview.classList.add("is-dragging");
+          });
+
+          preview.addEventListener("dragover", (event) => {
+            if (!hasDraggedFiles(event)) {
+              return;
+            }
+
+            event.preventDefault();
+            event.dataTransfer.dropEffect = "copy";
+          });
+
+          preview.addEventListener("dragleave", () => {
+            dragDepth = Math.max(0, dragDepth - 1);
+
+            if (dragDepth === 0) {
+              preview.classList.remove("is-dragging");
+            }
+          });
+
+          preview.addEventListener("drop", async (event) => {
+            event.preventDefault();
+            dragDepth = 0;
+            preview.classList.remove("is-dragging");
+
+            const file = getDroppedImageFile(event);
+
+            if (!file) {
+              return;
+            }
+
+            try {
+              await replaceImage(file);
+            } catch (error) {
+              console.error("Could not load dropped image.", error);
+            }
+          });
+        }
+
+        function render(now) {
+          sourceMaterial.uniforms.uLightRadius.value = settings.lightRadius;
+          sourceMaterial.uniforms.uLightPower.value = settings.lightPower;
+          sourceMaterial.uniforms.uAmbient.value = settings.ambient;
+          lightSource.intensity = 1.4 + settings.lightPower * 1.8;
+          ambientLight.intensity = 0.2 + settings.ambient * 0.5;
+          fakeHDRTorus.rotation.x = now * 0.0007;
+          fakeHDRTorus.rotation.y += 0.005;
+          ultraHDRTorus.rotation.x = now * 0.0007;
+          ultraHDRTorus.rotation.y += 0.005;
+
+          postMaterial.uniforms.iTime.value = now / 1000;
+          postMaterial.uniforms.uPixelSize.value = settings.pixelSize;
+          postMaterial.uniforms.uDitherStrength.value = settings.ditherStrength;
+          postMaterial.uniforms.uUseWhite.value = settings.useWhite ? 1 : 0;
+          postMaterial.uniforms.uBrightness.value = settings.brightness;
+          postMaterial.uniforms.uContrast.value = settings.contrast;
+          postMaterial.uniforms.uGamma.value = settings.gamma;
+          postMaterial.uniforms.uSaturation.value = settings.saturation;
+          postMaterial.uniforms.uMagentaBias.value = settings.magentaBias;
+
+          renderer.setRenderTarget(renderTarget);
+          renderer.render(sourceScene, camera);
+          renderer.setRenderTarget(null);
+          renderer.render(postScene, postCamera);
+          window.requestAnimationFrame(render);
+        }
+
+        window.addEventListener("resize", resize);
+        setupLightDrag();
+        setupDropTarget();
+        resize();
+        window.requestAnimationFrame(render);
+      }
+
+      init().catch((error) => {
+        console.error("CGA shader test failed to initialize.", error);
+      });
+      setupControls();
+    </script>
+  </body>
+</html>

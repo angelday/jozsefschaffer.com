@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raster Mask Test</title>
+  <style>
+    :root {
+      --cga-black: #000;
+      --cga-gray: #aaa;
+      --cga-white: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 0;
+      background: var(--cga-gray);
+    }
+
+    .strips {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage {
+      width: 100vw;
+    }
+
+    .stage+.stage {
+      margin-top: 0;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 64px;
+      background: var(--cga-black);
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="strips" id="raster-strips"></main>
+
+  <script>
+    const imagePath = "./img/hero-raster-reveal-cga.png";
+    const sideMaskCount = 8;
+    const maskCount = sideMaskCount * 2;
+    const maskHeight = 16 * 4;
+    const scrollStep = 6;
+    const staggerFrames = 2;
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error(`Could not load ${src}`));
+        image.src = src;
+      });
+    }
+
+    async function init() {
+      const stripRoot = document.getElementById("raster-strips");
+
+      if (!(stripRoot instanceof HTMLElement)) {
+        return;
+      }
+
+      stripRoot.innerHTML = "";
+
+      for (let index = 0; index < maskCount; index += 1) {
+        const stage = document.createElement("section");
+        const canvas = document.createElement("canvas");
+
+        stage.className = "stage";
+        canvas.className = "raster-mask";
+        canvas.setAttribute("aria-label", `Raster mask reveal ${index + 1}`);
+        stage.append(canvas);
+        stripRoot.append(stage);
+      }
+
+      const canvases = document.querySelectorAll(".raster-mask");
+
+      const image = await loadImage(imagePath);
+      const imageWidth = image.naturalWidth;
+      const height = image.naturalHeight;
+      const strips = [...canvases]
+        .filter((canvas) => canvas instanceof HTMLCanvasElement)
+        .map((canvas, index) => {
+          const context = canvas.getContext("2d");
+          const isMirror = index >= sideMaskCount;
+          const distanceFromCenter = isMirror
+            ? index - sideMaskCount
+            : sideMaskCount - index - 1;
+
+          return { canvas, context, distanceFromCenter, isMirror };
+        })
+        .filter(({ context }) => context);
+
+      if (strips.length === 0) {
+        return;
+      }
+
+      function resize() {
+        const ratio = window.devicePixelRatio || 1;
+
+        strips.forEach(({ canvas, context }) => {
+          canvas.width = Math.ceil(window.innerWidth * ratio);
+          canvas.height = maskHeight * ratio;
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          context.imageSmoothingEnabled = false;
+        });
+      }
+
+      function renderStrip(strip, frame) {
+        const width = window.innerWidth;
+        const localFrame = frame - strip.distanceFromCenter * staggerFrames;
+
+        strip.context.clearRect(0, 0, width, maskHeight);
+
+        if (localFrame < 0) {
+          return;
+        }
+
+        const offsetY = maskHeight - localFrame * scrollStep;
+
+        if (offsetY < -height) {
+          return;
+        }
+
+        if (strip.isMirror) {
+          strip.context.save();
+          strip.context.translate(0, maskHeight);
+          strip.context.scale(1, -1);
+
+          for (let x = 0; x < width; x += imageWidth) {
+            strip.context.drawImage(image, x, offsetY);
+          }
+
+          strip.context.restore();
+          return;
+        }
+
+        for (let x = 0; x < width; x += imageWidth) {
+          strip.context.drawImage(image, x, offsetY);
+        }
+      }
+
+      let frame = 0;
+      const scrollFrames = Math.ceil((maskHeight + height) / scrollStep);
+      const finalFrame = scrollFrames + staggerFrames * (sideMaskCount - 1);
+
+      function render() {
+        strips.forEach((strip) => renderStrip(strip, frame));
+        frame += 1;
+
+        if (frame <= finalFrame) {
+          window.requestAnimationFrame(render);
+        }
+      }
+
+      window.addEventListener("resize", resize);
+      resize();
+      render();
+    }
+
+    init().catch((error) => {
+      console.error("Raster mask test failed to initialize.", error);
+    });
+  </script>
+</body>
+
+</html>
