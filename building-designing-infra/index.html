@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#aaaaaa"><title>Building a Tiny Infra Dashboard for My Ghost Setup — József Schaffer</title><meta name="description" content="A small dashboard for taming updates and self-hosted Ghost upkeep."><link rel="icon" href="/favicon.png?v=20260413-2"><meta property="og:type" content="article"><meta property="og:title" content="Building a Tiny Infra Dashboard for My Ghost Setup"><meta property="og:description" content="A small dashboard for taming updates and self-hosted Ghost upkeep."><meta property="og:image" content="/og-image.png?v=20260413-2"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Building a Tiny Infra Dashboard for My Ghost Setup"><meta name="twitter:description" content="A small dashboard for taming updates and self-hosted Ghost upkeep."><meta name="twitter:image" content="/og-image.png?v=20260413-2"><link rel="stylesheet" href="/_astro/_slug_.BaRZ7atO.css">
+<style>.about-cursor{position:fixed;top:0;left:0;z-index:9999;display:none;width:72px;height:72px;pointer-events:none;background-image:url(/img/CGA_pointer.png);background-repeat:no-repeat;background-position:top left;background-size:contain;image-rendering:pixelated;will-change:transform}.about-cursor.is-select{background-image:url(/img/CGA_pointer_select.png)}.about-cursor.is-active{background-image:url(/img/CGA_pointer_active.png)}@media(hover:hover)and (pointer:fine){[data-about-cursor-root],[data-about-cursor-root] *{cursor:none}}
+.site-footer{margin:0;padding:32px 0;color:#000;font-family:Geist Pixel Square,Geist,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:22px;font-weight:400;line-height:1.4;text-align:center}@media(max-width:900px){.site-footer{font-size:18px}}@media(max-width:540px){.site-footer{padding:12px 0;font-size:16px}}
+</style></head> <body class="post"> <nav class="post-nav" aria-label="Site navigation" data-about-cursor-root> <div class="post-nav__inner"> <a class="post-nav__item" href="/projects/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">Projects</span> <span class="post-nav__arrow" aria-hidden="true">←</span> </span> </a> <a class="post-nav__item post-nav__item--end" href="/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">jozsefschaffer.com</span> </span> </a> </div> </nav> <article> <div class="gh-content"> <header class="post-header"> <h1>Building a Tiny Infra Dashboard for My Ghost Setup</h1> <div class="post-byline"> <span>József Schaffer</span> <span> · </span> <span>30 May 2026</span> </div> </header> <p>In my <a href="/adding-a-cms-to-this-website/" rel="noreferrer">previous post</a>, I explained how I set up a new headless Ghost workflow for this website. It worked, but using it in practice exposed a few issues, mainly because I do not have one Ghost server on my home computer but two.</p><p>The catch was that, with two sites, only the port numbers distinguish them. Every time I wanted to switch to the other site, I had to type in the admin email address and password again.</p><p>I started thinking about how to give the two Ghost servers proper hostnames that I could reach from outside, even from my phone, and still keep the whole thing free. I also had another problem: after editing a site, I still had to “publish” it from a computer by running a script that generated the static files and so on.</p><p>Another issue that kept coming up was updates. Ghost releases them fairly often, so I had to keep updating everything by hand. It was not difficult, but jumping into the right folder and running the same few commands every time got old quickly. I did that for weeks before it started to feel a bit tight.</p><p>My first step was a simple script that just updated the Ghost sites one by one. That turned out to be pretty handy, and then I realized I was still doing the Homebrew updates by hand too. So I started wondering whether I should write a larger script that would simply walk through <code>brew update</code>, <code>brew upgrade</code>, and <code>ghost update</code> in one go.</p><p>That was where I started, and I probably would have moved on with my life, but then another idea started nagging at me:</p><p>What if I built a small dashboard that simply showed whether there were any Homebrew or Ghost updates on the machine? And while I was at it, it could also start and stop the Ghost servers. That sounded pretty nice.</p><p>That was more or less the starting point of the whole infra project.</p><p>I already had a free Tailscale setup (a private VPN, excellent, I recommend it to everyone), so I could already reach the Ghost CMSes remotely. But the URLs were clumsy, and the login problem was still there. After a bit of thinking, I landed on the following infrastructure setup:</p><figure class="kg-card kg-image-card kg-width-wide"><img src="/content/images/2026/05/acaa5249-03fa-49ff-b977-81f24c2e4176_1917x1290.png" class="kg-image" alt="" data-no-lightbox loading="lazy" width="1917" height="1290" srcset="/content/images/size/w600/2026/05/acaa5249-03fa-49ff-b977-81f24c2e4176_1917x1290.png 600w, /content/images/size/w1000/2026/05/acaa5249-03fa-49ff-b977-81f24c2e4176_1917x1290.png 1000w, /content/images/size/w1600/2026/05/acaa5249-03fa-49ff-b977-81f24c2e4176_1917x1290.png 1600w, /content/images/2026/05/acaa5249-03fa-49ff-b977-81f24c2e4176_1917x1290.png 1917w" sizes="(min-width: 1200px) 1200px"></figure><p>In Tailscale’s web admin, I added a <a href="https://tailscale.com/learn/why-split-dns" target="_blank" rel="noopener noreferrer" rel="noreferrer">split-DNS</a> entry for one of my unused domains. The point of this is that DNS queries for that domain are resolved by my own private DNS server (<code>dnsmasq</code>).</p><p>I also needed Caddy, which proxies traffic to the correct local IP addresses and ports. That became my “infrastructure,” and as a result I ended up with beautiful hostnames instead of horrors like <code>jozsimini.tail59ab12.ts.net:4321</code>:</p><p><code>http://jozsefschaffer.csokolade.hu/ghost</code><br>and<br><code>http://hetimeteor.csokolade.hu/ghost</code></p><p>After that came the design process, which I’ll write about in a separate post. For now, the short version is that after about a week of fairly intense work, I reached a state I was happy with.</p><figure class="kg-card kg-image-card kg-width-wide kg-image-bordered"><img src="/content/images/2026/05/Screenshot-2026-05-30-at-11.00.08.png" class="kg-image" alt="" data-no-lightbox loading="lazy" width="2000" height="1619" srcset="/content/images/size/w600/2026/05/Screenshot-2026-05-30-at-11.00.08.png 600w, /content/images/size/w1000/2026/05/Screenshot-2026-05-30-at-11.00.08.png 1000w, /content/images/size/w1600/2026/05/Screenshot-2026-05-30-at-11.00.08.png 1600w, /content/images/2026/05/Screenshot-2026-05-30-at-11.00.08.png 2374w" sizes="(min-width: 1200px) 1200px"></figure><p>Technically, a Node server polls the machine for Homebrew and Ghost updates once an hour. It exposes two API endpoints: a full one, which the front end uses to render the cards, and a compact one, which the Swift menu bar app uses to decide which icon to show. With one glance, I can tell whether there is an update waiting for me.</p><figure class="kg-card kg-image-card kg-card-hascaption kg-image-scaled kg-image-bordered" style="--kg-image-width: 50%;"><img src="/content/images/2026/05/Screenshot-2026-05-31-at-07.05.46.png" class="kg-image" alt="" data-no-lightbox loading="lazy" width="404" height="508"><figcaption><span style="white-space: pre-wrap;">Updates at a glance</span></figcaption></figure><p>I built the whole thing in a very lean way. I still start the Node server by hand — no <code>launchd</code> — and let it run in its own Terminal window so I can see the logs. The Swift app is just compiled from the command line into a binary and launched the same way. For now, it is perfect. The only new problem in my life is that I now keep checking whether any new Homebrew updates have arrived.</p> </div> </article> <footer class="site-footer" data-about-cursor-select>© 2026 József Schaffer</footer> <script type="module">const r=new Map;let s=null;function u(){return s||(s=new AudioContext),s}async function i(t){if(r.has(t))return r.get(t);const n=await(await fetch(t)).arrayBuffer(),o=await u().decodeAudioData(n);return r.set(t,o),o}async function d(t,e={}){const n=u(),o=await i(t),a=n.createBufferSource(),c=n.createGain();return c.gain.value=.5,a.buffer=o,a.connect(c),c.connect(n.destination),e.onStart?.(),a.start(),new Promise(f=>{a.onended=f})}document.querySelectorAll("[data-pc-sound]").forEach(t=>{t.addEventListener("click",e=>{const n=t.closest("a")?.href||(t instanceof HTMLAnchorElement?t.href:null);n&&e.preventDefault(),d(t.dataset.pcSound,{onStart:()=>t.dispatchEvent(new CustomEvent("pc-sound-start"))}).then(()=>{t.dispatchEvent(new CustomEvent("pc-sound-end")),n&&(window.location.href=n)})})});</script> <div class="about-cursor" data-about-cursor aria-hidden="true"></div> <script type="module">const base = "";
+
+      import(`${base}/js/about-cursor.js`).then((m) => m.initAboutCursor());
+    </script> <script>
+      (() => {
+        const nav = document.querySelector('.post-nav');
+        if (!nav) return;
+
+        const compactAt = 72;
+        const expandAt = 1;
+        let isCompact = nav.classList.contains('post-nav--compact');
+        let scrollFrame = 0;
+
+        const syncCompactState = () => {
+          scrollFrame = 0;
+          const shouldCompact = isCompact
+            ? window.scrollY > expandAt
+            : window.scrollY >= compactAt;
+
+          if (shouldCompact === isCompact) return;
+          isCompact = shouldCompact;
+          nav.classList.toggle('post-nav--compact', isCompact);
+        };
+
+        const onScroll = () => {
+          if (scrollFrame) return;
+          scrollFrame = requestAnimationFrame(syncCompactState);
+        };
+
+        syncCompactState();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+    </script> <script src="/js/ghost-cards.js"></script> <script src="/js/lightbox.js"></script> <script>
+      (() => {
+        document.querySelectorAll('.gh-content pre:not([data-no-copy])').forEach((pre) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'copy-code-wrap';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+          const code = pre.querySelector('code');
+          const text = (code || pre).textContent;
+          const singleLine = text.trim().split('\n').length === 1;
+          const btn = document.createElement('button');
+          btn.textContent = 'Copy';
+          btn.className = 'copy-code-btn' + (singleLine ? ' copy-code-btn--center' : '');
+          btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(text).then(() => {
+              btn.textContent = 'Copied!';
+              setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+            });
+          });
+          wrapper.appendChild(btn);
+        });
+      })();
+    </script> </body> </html>

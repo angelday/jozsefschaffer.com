@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#aaaaaa"><title>Video Downloads from Terminal: ydl — József Schaffer</title><meta name="description" content="A quick, Mac-friendly command-line video downloader powered by yt-dlp."><link rel="icon" href="/favicon.png?v=20260413-2"><meta property="og:type" content="article"><meta property="og:title" content="Video Downloads from Terminal: ydl"><meta property="og:description" content="A quick, Mac-friendly command-line video downloader powered by yt-dlp."><meta property="og:image" content="/content/images/2026/06/Screenshot-2026-06-03-at-10.57.42-1.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Video Downloads from Terminal: ydl"><meta name="twitter:description" content="A quick, Mac-friendly command-line video downloader powered by yt-dlp."><meta name="twitter:image" content="/content/images/2026/06/Screenshot-2026-06-03-at-10.57.42-1.png"><link rel="stylesheet" href="/_astro/_slug_.BaRZ7atO.css">
+<style>.about-cursor{position:fixed;top:0;left:0;z-index:9999;display:none;width:72px;height:72px;pointer-events:none;background-image:url(/img/CGA_pointer.png);background-repeat:no-repeat;background-position:top left;background-size:contain;image-rendering:pixelated;will-change:transform}.about-cursor.is-select{background-image:url(/img/CGA_pointer_select.png)}.about-cursor.is-active{background-image:url(/img/CGA_pointer_active.png)}@media(hover:hover)and (pointer:fine){[data-about-cursor-root],[data-about-cursor-root] *{cursor:none}}
+.site-footer{margin:0;padding:32px 0;color:#000;font-family:Geist Pixel Square,Geist,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:22px;font-weight:400;line-height:1.4;text-align:center}@media(max-width:900px){.site-footer{font-size:18px}}@media(max-width:540px){.site-footer{padding:12px 0;font-size:16px}}
+</style></head> <body class="post"> <nav class="post-nav" aria-label="Site navigation" data-about-cursor-root> <div class="post-nav__inner"> <a class="post-nav__item" href="/projects/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">Projects</span> <span class="post-nav__arrow" aria-hidden="true">←</span> </span> </a> <a class="post-nav__item post-nav__item--end" href="/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">jozsefschaffer.com</span> </span> </a> </div> </nav> <article> <div class="gh-content"> <header class="post-header"> <h1>Video Downloads from Terminal: ydl</h1> <div class="post-byline"> <span>József Schaffer</span> <span> · </span> <span>Originally published 8 April 2026</span><span> · </span><span>Updated 6 June 2026</span> </div> </header> <p>I built a small wrapper around <a href="https://github.com/yt-dlp/yt-dlp" target="_blank" rel="noopener noreferrer" rel="noreferrer">yt-dlp</a> to make it easier to use. Enter <code>ydl</code>, my macOS-friendly video downloader. It takes the URL from your clipboard, or even multiple URLs, such as a YouTube link, and downloads the best available version.</p><p><a href="https://github.com/angelday/ydl" target="_blank" rel="noopener noreferrer" rel="noreferrer">The project lives on GitHub</a>, but installing it on any Mac is simple: just run this command in Terminal.</p><pre><code class="language-sh">/bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/angelday/ydl/main/install.zsh)"</code></pre><p>This takes care of everything: it installs the dependencies, copies the script to its final location, and makes it executable. You can just re-run the command to update it. There is no package manager yet.</p><figure class="kg-card kg-image-card kg-width-wide kg-card-hascaption"><img src="/content/images/2026/06/ydl_screenshot.png" class="kg-image" alt="" loading="lazy" width="1384" height="994" srcset="/content/images/size/w600/2026/06/ydl_screenshot.png 600w, /content/images/size/w1000/2026/06/ydl_screenshot.png 1000w, /content/images/2026/06/ydl_screenshot.png 1384w" sizes="(min-width: 1200px) 1200px"><figcaption><span style="white-space: pre-wrap;">ydl in action batch downloading and converting a VP9 video</span></figcaption></figure><p>Usage: open Terminal, navigate to the folder where you want the download to go, and run <code>ydl</code>. It will download the video from whatever URL is on your clipboard. You can also pass multiple, unformatted links, and it will intelligently retrieve the URLs one by one. If something is not in an Apple-friendly format, such as a VP9 video, it will re-encode it to MP4 so Quick Look can play it, icons show the correct preview, and so on.</p><p>Why not just use <code>yt-dlp</code> directly? Because my tool always tries to download the highest-quality Mac-friendly version, and it also gives you a very simple front end for everyday use.</p><p>Here is the full command help:</p><pre data-no-copy><code class="language-sh">jozsi@jozsimini % ydl -h
+ydl 1.4.3
+Usage: ydl [-a] [-v] [-c [browser]] ['URL or text with URLs'] [extra yt-dlp args...]
+
+Downloads the best available video using yt-dlp, preferring H.264/H.265.
+Use --audio to save only audio as M4A.
+Torrent URLs are fetched with browser cookies and downloaded with transmission-cli.
+If no input is given, reads URLs from clipboard text.
+If input contains multiple URLs, downloads them one by one.
+Videos outside Apple-friendly H.264/H.265 are converted to H.264 MP4.
+
+URL should be wrapped in quotes to avoid shell interpretation.
+Accepted URL schemes: http, https, ftp.
+
+Options:
+  -a, --audio    Save only audio as M4A
+  -c [browser]   Use cookies from browser (default: safari)
+  -v, --verbose  Show raw yt-dlp and ffmpeg output
+  -h, --help     Show this help</code></pre><p>Enjoy!</p><hr><h2 id="changelog">Changelog</h2><p>See <a href="https://github.com/angelday/ydl/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer" rel="noreferrer">full changelog</a> for details.</p><ul><li>2026-06-06 v1.4.3 – improved copywriting: active progress rows use aligned gerund labels</li><li>2026-06-04 v1.4.2 – bugfix: removed forcing headers for better compatibility with Facebook</li><li>2026-05-21 v1.4.1 – added <code>-a</code> to download audio only</li><li>2026-05-19 v1.4 – added experimental .torrent support (no seeding, just snatches a file and closes down the torrent)</li></ul> </div> </article> <footer class="site-footer" data-about-cursor-select>© 2026 József Schaffer</footer> <script type="module">const r=new Map;let s=null;function u(){return s||(s=new AudioContext),s}async function i(t){if(r.has(t))return r.get(t);const n=await(await fetch(t)).arrayBuffer(),o=await u().decodeAudioData(n);return r.set(t,o),o}async function d(t,e={}){const n=u(),o=await i(t),a=n.createBufferSource(),c=n.createGain();return c.gain.value=.5,a.buffer=o,a.connect(c),c.connect(n.destination),e.onStart?.(),a.start(),new Promise(f=>{a.onended=f})}document.querySelectorAll("[data-pc-sound]").forEach(t=>{t.addEventListener("click",e=>{const n=t.closest("a")?.href||(t instanceof HTMLAnchorElement?t.href:null);n&&e.preventDefault(),d(t.dataset.pcSound,{onStart:()=>t.dispatchEvent(new CustomEvent("pc-sound-start"))}).then(()=>{t.dispatchEvent(new CustomEvent("pc-sound-end")),n&&(window.location.href=n)})})});</script> <div class="about-cursor" data-about-cursor aria-hidden="true"></div> <script type="module">const base = "";
+
+      import(`${base}/js/about-cursor.js`).then((m) => m.initAboutCursor());
+    </script> <script>
+      (() => {
+        const nav = document.querySelector('.post-nav');
+        if (!nav) return;
+
+        const compactAt = 72;
+        const expandAt = 1;
+        let isCompact = nav.classList.contains('post-nav--compact');
+        let scrollFrame = 0;
+
+        const syncCompactState = () => {
+          scrollFrame = 0;
+          const shouldCompact = isCompact
+            ? window.scrollY > expandAt
+            : window.scrollY >= compactAt;
+
+          if (shouldCompact === isCompact) return;
+          isCompact = shouldCompact;
+          nav.classList.toggle('post-nav--compact', isCompact);
+        };
+
+        const onScroll = () => {
+          if (scrollFrame) return;
+          scrollFrame = requestAnimationFrame(syncCompactState);
+        };
+
+        syncCompactState();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+    </script> <script src="/js/ghost-cards.js"></script> <script src="/js/lightbox.js"></script> <script>
+      (() => {
+        document.querySelectorAll('.gh-content pre:not([data-no-copy])').forEach((pre) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'copy-code-wrap';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+          const code = pre.querySelector('code');
+          const text = (code || pre).textContent;
+          const singleLine = text.trim().split('\n').length === 1;
+          const btn = document.createElement('button');
+          btn.textContent = 'Copy';
+          btn.className = 'copy-code-btn' + (singleLine ? ' copy-code-btn--center' : '');
+          btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(text).then(() => {
+              btn.textContent = 'Copied!';
+              setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+            });
+          });
+          wrapper.appendChild(btn);
+        });
+      })();
+    </script> </body> </html>

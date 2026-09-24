@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#aaaaaa"><title>Old-school Apps on a Modern Mac — József Schaffer</title><meta name="description" content="An easy setup for running more obscure Windows apps on a modern Mac."><link rel="icon" href="/favicon.png?v=20260413-2"><meta property="og:type" content="article"><meta property="og:title" content="Old-school Apps on a Modern Mac"><meta property="og:description" content="An easy setup for running more obscure Windows apps on a modern Mac."><meta property="og:image" content="/content/images/2026/06/charpad-cga-checker-4x.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Old-school Apps on a Modern Mac"><meta name="twitter:description" content="An easy setup for running more obscure Windows apps on a modern Mac."><meta name="twitter:image" content="/content/images/2026/06/charpad-cga-checker-4x.png"><link rel="stylesheet" href="/_astro/_slug_.BaRZ7atO.css">
+<style>.about-cursor{position:fixed;top:0;left:0;z-index:9999;display:none;width:72px;height:72px;pointer-events:none;background-image:url(/img/CGA_pointer.png);background-repeat:no-repeat;background-position:top left;background-size:contain;image-rendering:pixelated;will-change:transform}.about-cursor.is-select{background-image:url(/img/CGA_pointer_select.png)}.about-cursor.is-active{background-image:url(/img/CGA_pointer_active.png)}@media(hover:hover)and (pointer:fine){[data-about-cursor-root],[data-about-cursor-root] *{cursor:none}}
+.site-footer{margin:0;padding:32px 0;color:#000;font-family:Geist Pixel Square,Geist,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:22px;font-weight:400;line-height:1.4;text-align:center}@media(max-width:900px){.site-footer{font-size:18px}}@media(max-width:540px){.site-footer{padding:12px 0;font-size:16px}}
+</style></head> <body class="post"> <nav class="post-nav" aria-label="Site navigation" data-about-cursor-root> <div class="post-nav__inner"> <a class="post-nav__item" href="/projects/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">Projects</span> <span class="post-nav__arrow" aria-hidden="true">←</span> </span> </a> <a class="post-nav__item post-nav__item--end" href="/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="post-nav__copy"> <span class="post-nav__label">jozsefschaffer.com</span> </span> </a> </div> </nav> <article> <div class="gh-content"> <header class="post-header"> <h1>Old-school Apps on a Modern Mac</h1> <div class="post-byline"> <span>József Schaffer</span> <span> · </span> <span>Originally published 20 March 2026</span><span> · </span><span>Updated 3 June 2026</span> </div> </header> <p>Many smaller Windows apps, especially indie games and niche tools, leave Mac users asking the same question: how can I run this on my Mac?</p><p>For example, <a href="https://subchristsoftware.itch.io/pro-editions" target="_blank" rel="noopener noreferrer" rel="noopener ugc nofollow">CharPad Pro and SpritePad Pro</a> are small Windows apps for creating Commodore 64 artwork, but they don’t have Mac equivalents. With a little CrossOver setup, they run nicely on a modern Mac.</p><p>If you do not have them yet, get them for $20. Then get <a href="https://www.codeweavers.com/crossover" target="_blank" rel="noopener noreferrer" rel="noopener ugc nofollow">CrossOver</a>. It costs $74, but you can try the full version for two weeks. If you buy it, keep an eye on renewals: after the first year, upgrades are cheaper than a full renewal.</p><h2 id="tldr">TL;DR</h2><p>If you just want to see the setup, this short video shows the whole process:</p><figure class="kg-card kg-embed-card kg-card-hascaption kg-width-wide"><iframe width="200" height="150" src="https://www.youtube.com/embed/4CmvWoBGGO0?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="" title="Launch CharPad / SpritePad Pro on a modern Mac using CrossOver"></iframe></figure><h2 id="step-by-step-instructions">Step-by-step instructions</h2><p>After installing CrossOver and unzipping the apps, launch CrossOver. You do not need to do anything in the main window yet.</p><ul><li>In the app menu, select <code>Bottle — New Bottle…</code>. Name the bottle anything you want, such as <code>C64</code>, leave the default <code>Windows 10</code> setting, and hit <code>Create</code>. After a short moment, your bottle will be ready.</li><li>From the menu on the right, select <code>Open C: Drive</code>. Open the <code>Program Files</code> folder, then move the unzipped CharPad and SpritePad folders into it.</li><li>Return to CrossOver, select <code>Run Command</code> from the right-side menu, then choose <code>CharPadPro_W64.exe</code> from the CharPad folder and hit <code>Open</code>.</li><li>In the window that appears, press <code>Save Command as a Launcher</code>.</li><li>Nothing may seem to happen at first, but after a short moment the launcher icon should appear.</li><li>Repeat the same process for SpritePad: hit <code>Browse…</code>, locate <code>SpritePadPro_380_W64.exe</code>, and save it as a launcher too.</li><li>Once both launchers are saved, close this window and return to the main CrossOver window.</li></ul><p>Both apps should now appear inside your bottle with their own icons. Double-click either one to launch it.</p><p>That’s it. Enjoy, and make something awesome for the Commodore 64. 😄</p><figure class="kg-card kg-image-card kg-width-wide"><img src="/content/images/2026/04/charpad.png" class="kg-image" alt="" loading="lazy" width="2000" height="1062" srcset="/content/images/size/w600/2026/04/charpad.png 600w, /content/images/size/w1000/2026/04/charpad.png 1000w, /content/images/size/w1600/2026/04/charpad.png 1600w, /content/images/2026/04/charpad.png 2000w" sizes="(min-width: 1200px) 1200px"></figure><figure class="kg-card kg-image-card kg-width-wide"><img src="/content/images/2026/04/spritepad.gif" class="kg-image" alt="" loading="lazy" width="1564" height="1024" srcset="/content/images/size/w600/2026/04/spritepad.gif 600w, /content/images/size/w1000/2026/04/spritepad.gif 1000w, /content/images/2026/04/spritepad.gif 1564w" sizes="(min-width: 720px) 720px"></figure><p>Many thanks to Niklas Bichinger for the original help.</p><div class="kg-card kg-callout-card kg-callout-card-yellow"><div class="kg-callout-text">Tested setup, April 10, 2026:<br><br>CrossOver 26.1<br>CharPad Pro 3.80<br>SpritePad Pro 3.80</div></div> </div> </article> <footer class="site-footer" data-about-cursor-select>© 2026 József Schaffer</footer> <script type="module">const r=new Map;let s=null;function u(){return s||(s=new AudioContext),s}async function i(t){if(r.has(t))return r.get(t);const n=await(await fetch(t)).arrayBuffer(),o=await u().decodeAudioData(n);return r.set(t,o),o}async function d(t,e={}){const n=u(),o=await i(t),a=n.createBufferSource(),c=n.createGain();return c.gain.value=.5,a.buffer=o,a.connect(c),c.connect(n.destination),e.onStart?.(),a.start(),new Promise(f=>{a.onended=f})}document.querySelectorAll("[data-pc-sound]").forEach(t=>{t.addEventListener("click",e=>{const n=t.closest("a")?.href||(t instanceof HTMLAnchorElement?t.href:null);n&&e.preventDefault(),d(t.dataset.pcSound,{onStart:()=>t.dispatchEvent(new CustomEvent("pc-sound-start"))}).then(()=>{t.dispatchEvent(new CustomEvent("pc-sound-end")),n&&(window.location.href=n)})})});</script> <div class="about-cursor" data-about-cursor aria-hidden="true"></div> <script type="module">const base = "";
+
+      import(`${base}/js/about-cursor.js`).then((m) => m.initAboutCursor());
+    </script> <script>
+      (() => {
+        const nav = document.querySelector('.post-nav');
+        if (!nav) return;
+
+        const compactAt = 72;
+        const expandAt = 1;
+        let isCompact = nav.classList.contains('post-nav--compact');
+        let scrollFrame = 0;
+
+        const syncCompactState = () => {
+          scrollFrame = 0;
+          const shouldCompact = isCompact
+            ? window.scrollY > expandAt
+            : window.scrollY >= compactAt;
+
+          if (shouldCompact === isCompact) return;
+          isCompact = shouldCompact;
+          nav.classList.toggle('post-nav--compact', isCompact);
+        };
+
+        const onScroll = () => {
+          if (scrollFrame) return;
+          scrollFrame = requestAnimationFrame(syncCompactState);
+        };
+
+        syncCompactState();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      })();
+    </script> <script src="/js/ghost-cards.js"></script> <script src="/js/lightbox.js"></script> <script>
+      (() => {
+        document.querySelectorAll('.gh-content pre:not([data-no-copy])').forEach((pre) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'copy-code-wrap';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+          const code = pre.querySelector('code');
+          const text = (code || pre).textContent;
+          const singleLine = text.trim().split('\n').length === 1;
+          const btn = document.createElement('button');
+          btn.textContent = 'Copy';
+          btn.className = 'copy-code-btn' + (singleLine ? ' copy-code-btn--center' : '');
+          btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(text).then(() => {
+              btn.textContent = 'Copied!';
+              setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+            });
+          });
+          wrapper.appendChild(btn);
+        });
+      })();
+    </script> </body> </html>

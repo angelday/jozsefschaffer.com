@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enigma Part 9 — József Schaffer</title>
+  <meta name="description" content="Part 9 of Phenomena's 1991 Amiga demo Enigma, rebuilt around a live ray tracer you can fly through, with the original intro, logo, scroller and music.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jozsefschaffer.com/enigma/">
+  <meta property="og:title" content="Enigma Part 9, like never before">
+  <meta property="og:description" content="Part 9 of Phenomena's 1991 Amiga demo Enigma, rebuilt around a live ray tracer you can fly through, with the original intro, logo, scroller and music.">
+  <meta property="og:image" content="https://jozsefschaffer.com/enigma/og-image.png?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The PHENOMENA logo above an arch of green ray-traced spheres on a mirrored Mandelbrot floor, with the chrome scroller reading LOOK AT THIS BEAUTY.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Enigma Part 9, like never before">
+  <meta name="twitter:description" content="Part 9 of Phenomena's 1991 Amiga demo Enigma, rebuilt around a live ray tracer you can fly through, with the original intro, logo, scroller and music.">
+  <meta name="twitter:image" content="https://jozsefschaffer.com/enigma/og-image.png?v=2">
+  <style>
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    body { display: flex; align-items: center; justify-content: center; }
+    /* the Amiga screen: 352x256 lowres pixels, scaled by the chosen zoom */
+    #stage { position: relative; background: #000; }
+    #screen { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+    #anim { position: absolute; overflow: hidden; }
+    #anim canvas { position: absolute; left: 0; top: 0; image-rendering: pixelated; }
+    #scene { cursor: grab; touch-action: none; }
+    #scene:active { cursor: grabbing; }
+    #original { visibility: hidden; pointer-events: none; }
+    /* the start screen is drawn on the canvas; this transparent button over it takes the click, Space or Enter */
+    #gate { position: absolute; inset: 0; z-index: 2; margin: 0; padding: 0; border: 0; background: none; cursor: pointer; }
+    #gate[hidden] { display: none; }
+    #gate:focus { outline: none; }
+
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "/vendor/three.module.js",
+        "three/addons/controls/OrbitControls.js": "/vendor/OrbitControls.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="stage">
+    <canvas id="screen"></canvas>
+    <div id="anim">
+      <canvas id="scene"></canvas>
+      <canvas id="original"></canvas>
+    </div>
+    <button id="gate" autofocus aria-label="Press play: part 9 of Enigma by Phenomena, with sound"></button>
+  </div>
+  <script src="assets/part9-data.js?v=17"></script>
+  <script src="assets/intertitle-data.js?v=17"></script>
+  <script src="assets/part1-data.js?v=17"></script>
+  <script src="js/screen.js?v=17"></script>
+  <script src="js/intertitle.js?v=17"></script>
+  <script src="js/starfield.js?v=17"></script>
+  <script src="js/pressplay.js?v=17"></script>
+  <script src="js/flyover.js?v=17"></script>
+  <script src="js/raytrace.js?v=17"></script>
+  <script src="js/main.js?v=17"></script>
+</body>
+</html>

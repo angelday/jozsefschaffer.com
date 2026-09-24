@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#aaaaaa"><title>About — József Schaffer</title><link rel="icon" href="/favicon.png?v=20260413-2"><meta property="og:type" content="website"><meta property="og:image" content="/og-image.png?v=20260413-2"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="/og-image.png?v=20260413-2"><link rel="stylesheet" href="/_astro/landing.YlOMsrkV.css">
+<style>.about-cursor{position:fixed;top:0;left:0;z-index:9999;display:none;width:72px;height:72px;pointer-events:none;background-image:url(/img/CGA_pointer.png);background-repeat:no-repeat;background-position:top left;background-size:contain;image-rendering:pixelated;will-change:transform}.about-cursor.is-select{background-image:url(/img/CGA_pointer_select.png)}.about-cursor.is-active{background-image:url(/img/CGA_pointer_active.png)}@media(hover:hover)and (pointer:fine){[data-about-cursor-root],[data-about-cursor-root] *{cursor:none}}
+.site-footer{margin:0;padding:32px 0;color:#000;font-family:Geist Pixel Square,Geist,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:22px;font-weight:400;line-height:1.4;text-align:center}@media(max-width:900px){.site-footer{font-size:18px}}@media(max-width:540px){.site-footer{padding:12px 0;font-size:16px}}
+</style></head> <body data-about-cursor-root> <header class="about-header" aria-label="Site navigation" data-compact-header> <canvas class="waveform waveform--hidden" data-waveform aria-hidden="true"></canvas>  <nav class="about-header__nav"> <a class="about-header__link" href="/" data-about-cursor-active data-pc-sound="/sounds/enter_2.mp3"> <span class="about-header__link-copy"> <span class="about-header__link-label">Home</span> <span class="about-header__link-arrow" aria-hidden="true">←</span> </span> </a>  <button class="about-header__play" type="button" data-music-toggle data-music-src="/sounds/menu_music_1.mp3" data-about-cursor-active aria-label="Play epic music"> <span class="about-header__play-label">Play epic music</span> </button> </nav> </header> <script type="module">const L=()=>{const C=document.querySelectorAll("[data-compact-header]"),l=144,h=1;C.forEach(a=>{if(a.dataset.compactHeaderReady)return;a.dataset.compactHeaderReady="true";let t=a.classList.contains("about-header--compact"),n=0;const m=()=>{n=0;const i=window.scrollY,s=t?i>h:i>=l;s!==t&&(t=s,a.classList.toggle("about-header--compact",t))},o=()=>{n||(n=requestAnimationFrame(m))};m(),window.addEventListener("scroll",o,{passive:!0})})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",L,{once:!0}):L();const b=()=>{document.querySelectorAll("[data-music-toggle]").forEach(l=>{const h=l.querySelector(".about-header__play-label"),a=l.closest("[data-compact-header]"),t=a?.querySelector("[data-waveform]");if(!h||!a||!t)return;const n=t.getContext("2d"),m=2;let o=null,i=null,s=null,u=null,p=null,f=!1;const E="waveform--hidden";function w(){const e=a.getBoundingClientRect(),c=Math.max(1,Math.floor(e.width/m)),d=Math.max(1,Math.floor(e.height/m));t.width===c&&t.height===d||(t.width=c,t.height=d)}function S(){const e=t.width,c=t.height;s.getByteTimeDomainData(u),n.clearRect(0,0,e,c),n.fillStyle="#aaaaaa";const d=c/2,z=u.length/e;let g=Math.floor(d+(u[0]-128)/128*d);for(let r=0;r<e;r++){const R=Math.min(u.length-1,Math.floor(r*z)),F=(u[R]-128)/128,A=Math.floor(d+F*d),x=Math.min(A,g),H=Math.max(A,g);n.fillRect(r,x,1,H-x+1),g=A}n.fillStyle="#000";for(let r=1;r<c;r+=2)n.fillRect(0,r,e,1);p=requestAnimationFrame(S)}function y(e){f=e,h.textContent=e?"Stop epic music":"Play epic music",t.classList.toggle(E,!e),l.setAttribute("aria-label",e?"Stop epic music":"Play epic music"),e?(w(),p=requestAnimationFrame(S)):(cancelAnimationFrame(p),p=null,n.clearRect(0,0,t.width,t.height))}function M(){o&&(o.pause(),o.currentTime=0,y(!1))}let v=0;const q=()=>{!f||v||(v=requestAnimationFrame(()=>{v=0,w()}))};new ResizeObserver(q).observe(a),window.addEventListener("resize",()=>{f&&w()}),a.querySelectorAll("[data-pc-sound]").forEach(e=>{e.addEventListener("click",()=>{f&&M()},{capture:!0})}),l.addEventListener("click",async()=>{if(f)M();else{if(!o){o=new Audio(l.dataset.musicSrc);const e=window.AudioContext||window.webkitAudioContext;i=new e;const c=i.createMediaElementSource(o);s=i.createAnalyser(),s.fftSize=1024,u=new Uint8Array(s.fftSize),c.connect(s),c.connect(i.destination),o.addEventListener("ended",()=>y(!1))}await i.resume(),await o.play(),y(!0)}})})};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",b,{once:!0}):b();</script> <div class="about-panel"> <div class="about-panel__media"> <img class="about-panel__media-image" src="/img/whatever_it_takes.png" alt="" aria-hidden="true"> </div> <header class="about-panel__header" data-about-cursor-select> <h1 class="about-panel__title">Thanks for stopping by!</h1> </header> <section class="about-panel__section" data-about-cursor-select> <p class="about-panel__text">
+I’ve been designing and building software professionally for 15+
+          years. Whether I’m evolving what already exists or creating something
+          entirely new, I love figuring out what to build. I care about both
+          delivery and craft.
+</p> </section> <section class="about-panel__section" data-about-cursor-select> <h2 class="about-panel__eyebrow">Personal tidbits about me</h2> <p class="about-panel__text">
+I’m originally from Hungary, happily married, a dad of three, and now
+          living in southern Sweden.
+</p> <p class="about-panel__text">
+In my free time, I play Nintendo games, enjoy retro platformers, stay
+          active, and get happily lost in pixel art.
+</p> <p class="about-panel__text">
+My first name, <em>József</em>, is the Hungarian version of Joseph. In
+          Hungarian, it’s often shortened to <em>Józsi</em>. When pronounced in
+          English, it can sound a bit like <em>Yoshi</em>. The nickname stuck,
+          and that’s what most people call me. (My GitHub/scene handle is
+<em>angelday</em>. Don’t ask.)
+</p> </section> <section class="about-panel__section" data-about-cursor-select> <h2 class="about-panel__title">Questions and Answers</h2> <dl class="about-panel__faq"> <dt class="about-panel__question">Did you create this website?</dt> <dd class="about-panel__answer">
+Yes. I originally designed it in Framer, then rebuilt it using
+<a href="https://jamstack.org" target="_blank" rel="noopener noreferrer" data-about-cursor-active>Jamstack</a>
+and changed the design considerably.
+</dd> <dt class="about-panel__question">What tools did you use?</dt> <dd class="about-panel__answer"> <a href="https://ghost.org" target="_blank" rel="noopener noreferrer" data-about-cursor-active>Ghost</a>
+as a headless CMS and
+<a href="https://astro.build" target="_blank" rel="noopener noreferrer" data-about-cursor-active>Astro</a>
+to render the site with a lot of custom enhancements. (If you’re interested,
+            I wrote about the tech in a bit more depth
+<a href="/adding-a-cms-to-this-website/" data-about-cursor-active>here</a>.) I also used
+<a href="https://www.framer.com" target="_blank" rel="noopener noreferrer" data-about-cursor-active>Framer</a>
+for the initial design and prototyping, Figma for some of the graphics,
+            and
+<a href="https://www.aseprite.org" target="_blank" rel="noopener noreferrer" data-about-cursor-active>Aseprite</a>
+for pixel art.
+</dd> <dt class="about-panel__question">
+Did you make this pixel art? Or is it AI?
+</dt> <dd class="about-panel__answer">
+I created the pixel art above using Aseprite from a photo reference.
+            You know, pixel by pixel with a lot of iterations. It’s a very
+            relaxing activity!
+</dd> <dt class="about-panel__question">
+What’s with these weird colors and this cursor?
+</dt> <dd class="about-panel__answer">A nod to late-’80s CGA graphics.</dd> <dt class="about-panel__question">
+What video game system do you recommend buying?
+</dt> <dd class="about-panel__answer">
+That would be the Nintendo Switch 2, thank you for asking.
+</dd> </dl> </section> <section class="about-panel__section" data-about-cursor-select> <h2 class="about-panel__eyebrow">A quote I return to often</h2> <blockquote class="about-panel__quote"> <p class="about-panel__text"> <em>"Most of the things I am most proud of have come from just doing
+              the thing</em> </p> <p class="about-panel__text"> <em>Most people would rather ask questions, debate, etc</em> </p> <p class="about-panel__text"> <em>Most decisions are two way doors and you are often times rewarded
+              for taking the initiative"</em> </p> <footer class="about-panel__quote-attribution">
+—
+<a href="https://logank.ai" target="_blank" rel="noopener noreferrer" data-about-cursor-active>Logan Kilpatrick</a> </footer> </blockquote> </section> <footer class="about-panel__footer" data-about-cursor-select> <img class="about-panel__signoff-gif" src="/img/yoshi-cga-muted.gif" alt="Yoshi"> </footer> </div> <footer class="site-footer" data-about-cursor-select>© 2026 József Schaffer</footer> <script type="module">const r=new Map;let s=null;function u(){return s||(s=new AudioContext),s}async function i(t){if(r.has(t))return r.get(t);const n=await(await fetch(t)).arrayBuffer(),o=await u().decodeAudioData(n);return r.set(t,o),o}async function d(t,e={}){const n=u(),o=await i(t),a=n.createBufferSource(),c=n.createGain();return c.gain.value=.5,a.buffer=o,a.connect(c),c.connect(n.destination),e.onStart?.(),a.start(),new Promise(f=>{a.onended=f})}document.querySelectorAll("[data-pc-sound]").forEach(t=>{t.addEventListener("click",e=>{const n=t.closest("a")?.href||(t instanceof HTMLAnchorElement?t.href:null);n&&e.preventDefault(),d(t.dataset.pcSound,{onStart:()=>t.dispatchEvent(new CustomEvent("pc-sound-start"))}).then(()=>{t.dispatchEvent(new CustomEvent("pc-sound-end")),n&&(window.location.href=n)})})});</script> <div class="about-cursor" data-about-cursor aria-hidden="true"></div> <script type="module">const base = "";
+
+      import(`${base}/js/about-cursor.js`).then((m) => m.initAboutCursor());
+    </script> </body> </html>
