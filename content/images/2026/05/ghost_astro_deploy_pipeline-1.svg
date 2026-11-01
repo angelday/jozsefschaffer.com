@@ -1,0 +1,35 @@
+<svg width="602" height="657" viewBox="0 0 602 657" fill="none" xmlns="http://www.w3.org/2000/svg">
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="1" y="12.26">AUTHOR</tspan></text>
+<path d="M585 26H17C8.16344 26 1 33.1634 1 42V130C1 138.837 8.16344 146 17 146H585C593.837 146 601 138.837 601 130V42C601 33.1634 593.837 26 585 26Z" fill="white" stroke="white" stroke-width="0.5"></path>
+<path d="M185 76H41C36.5817 76 33 79.5817 33 84V112C33 116.418 36.5817 120 41 120H185C189.418 120 193 116.418 193 112V84C193 79.5817 189.418 76 185 76Z" stroke="black"></path>
+<path d="M373 76H229C224.582 76 221 79.5817 221 84V112C221 116.418 224.582 120 229 120H373C377.418 120 381 116.418 381 112V84C381 79.5817 377.418 76 373 76Z" stroke="black"></path>
+<path d="M561 76H417C412.582 76 409 79.5817 409 84V112C409 116.418 412.582 120 417 120H561C565.418 120 569 116.418 569 112V84C569 79.5817 565.418 76 561 76Z" stroke="black"></path>
+<path d="M301 159V199" stroke="black"></path>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="1" y="202.26">BUILD</tspan></text>
+<path d="M585 216H17C8.16344 216 1 223.163 1 232V450C1 458.837 8.16344 466 17 466H585C593.837 466 601 458.837 601 450V232C601 223.163 593.837 216 585 216Z" fill="white"></path>
+<path d="M275 266H41C36.5817 266 33 269.582 33 274V314C33 318.418 36.5817 322 41 322H275C279.418 322 283 318.418 283 314V274C283 269.582 279.418 266 275 266Z" stroke="black"></path>
+<path d="M561 266H327C322.582 266 319 269.582 319 274V314C319 318.418 322.582 322 327 322H561C565.418 322 569 318.418 569 314V274C569 269.582 565.418 266 561 266Z" stroke="black"></path>
+<path d="M158 331V357" stroke="black"></path>
+<path d="M275 366H41C36.5817 366 33 369.582 33 374V414C33 418.418 36.5817 422 41 422H275C279.418 422 283 418.418 283 414V374C283 369.582 279.418 366 275 366Z" stroke="black"></path>
+<path d="M301 481V521" stroke="black"></path>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="1" y="522.26">DEPLOY</tspan></text>
+<path d="M585 536H17C8.16344 536 1 543.163 1 552V640C1 648.837 8.16344 656 17 656H585C593.837 656 601 648.837 601 640V552C601 543.163 593.837 536 585 536Z" fill="white"></path>
+<path d="M275 568H41C36.5817 568 33 571.582 33 576V616C33 620.418 36.5817 624 41 624H275C279.418 624 283 620.418 283 616V576C283 571.582 279.418 568 275 568Z" fill="white" stroke="black"></path>
+<path d="M561 568H327C322.582 568 319 571.582 319 576V616C319 620.418 322.582 624 327 624H561C565.418 624 569 620.418 569 616V576C569 571.582 565.418 568 561 568Z" fill="white" stroke="black"></path>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="264.591" y="56.97">Ghost CMS</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="71.792" y="101.97">Edit content</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="266.41" y="101.97">Add media</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="464.254" y="101.97">Publish</tspan></text>
+<text fill="#3D3D3A" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="311" y="182.26">Ghost Content API</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="284.472" y="246.97">Astro</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="81.9424" y="287.97">Fetch &amp; reformat posts</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="71.5742" y="308.26">Rewrite localhost media URLs</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="389.156" y="287.97">Local dev server</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="364.178" y="308.26">Preview on desktop &amp; phone</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="88.8672" y="389.97">Generate static files</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="90.2773" y="410.26">Full static HTML output</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="113.04" y="591.97">Deploy script</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="77.3066" y="612.26">Disposable gh-pages branch</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="14" letter-spacing="0em"><tspan x="399.04" y="591.97">GitHub Pages</tspan></text>
+<text fill="black" style="white-space: pre" xml:space="preserve" font-family="Geist Pixel" font-size="12" letter-spacing="0em"><tspan x="393.375" y="612.26">Serves static site</tspan></text>
+</svg>
